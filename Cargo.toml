@@ -12,6 +12,8 @@ categories = ["command-line-utilities", "development-tools"]
 
 
 [dependencies]
+# CLI parsing
+structopt = "0.3.21"
 
 # Logging
 log = "0.4.14"
