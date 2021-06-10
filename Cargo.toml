@@ -1,0 +1,19 @@
+[package]
+name = "did_i_break_it"
+version = "0.0.1"
+authors = ["DeveloperC <DeveloperC@protonmail.com>"]
+edition = "2018"
+license = "AGPL-3.0"
+description = "A tooling for checking your https://crates.io library's reverse dependencies with your local version."
+repository = "https://gitlab.com/DeveloperC/did_i_break_it"
+readme = "README.md"
+keywords = ["library", "breaking", "semantic", "versioning", "change"]
+categories = ["command-line-utilities", "development-tools"]
+
+
+[dependencies]
+
+
+[profile.release]
+lto = 'fat'
+codegen-units = 1
