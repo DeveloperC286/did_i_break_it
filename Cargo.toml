@@ -1,6 +1,6 @@
 [package]
 name = "did_i_break_it"
-version = "0.0.1"
+version = "0.1.0"
 authors = ["DeveloperC <DeveloperC@protonmail.com>"]
 edition = "2018"
 license = "AGPL-3.0"
@@ -12,6 +12,10 @@ categories = ["command-line-utilities", "development-tools"]
 
 
 [dependencies]
+
+# Logging
+log = "0.4.14"
+pretty_env_logger = "0.4.0"
 
 
 [profile.release]

@@ -1,3 +1,7 @@
+extern crate pretty_env_logger;
+#[macro_use]
+extern crate log;
+
 fn main() {
-    println!("Hello, crates.io!");
+    pretty_env_logger::init();
 }
