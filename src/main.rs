@@ -1,6 +1,8 @@
 extern crate pretty_env_logger;
 #[macro_use]
 extern crate log;
+#[macro_use]
+extern crate lazy_static;
 
 use crate::model::local_crate::LocalCrate;
 use std::process::exit;
@@ -8,6 +10,7 @@ use structopt::StructOpt;
 
 mod cli;
 mod model;
+mod utilities;
 
 const ERROR_EXIT_CODE: i32 = 1;
 
