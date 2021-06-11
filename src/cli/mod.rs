@@ -6,6 +6,10 @@ use structopt::StructOpt;
     about = "A tooling for checking your https://crates.io library's reverse dependencies with your local version."
 )]
 pub struct Arguments {
-    #[structopt(long, help = "Suppress all typical informational output.")]
-    pub quiet: bool,
+    #[structopt(
+        long,
+        help = "The path to the local crate to build the reverse dependencies for.",
+        default_value = "."
+    )]
+    pub local_crate: String,
 }
