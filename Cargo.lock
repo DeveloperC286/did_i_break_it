@@ -106,7 +106,9 @@ dependencies = [
  "encode_unicode",
  "lazy_static",
  "libc",
+ "regex",
  "terminal_size",
+ "unicode-width",
  "winapi",
 ]
 
@@ -131,6 +133,7 @@ name = "did_i_break_it"
 version = "0.1.0"
 dependencies = [
  "cargo_toml",
+ "console",
  "http",
  "insta",
  "lazy_static",

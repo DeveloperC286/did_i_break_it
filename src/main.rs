@@ -6,6 +6,7 @@ extern crate lazy_static;
 
 use crate::model::local_crate::LocalCrate;
 use crate::model::reverse_dependencies::ReverseDependencies;
+use crate::model::statistics::Statistics;
 
 use std::fs::{create_dir_all, remove_dir_all, File};
 use std::io::Write;
@@ -35,12 +36,11 @@ fn main() {
             match ReverseDependencies::from_url(
                 &local_crate.get_reverse_dependencies_url(&arguments.api_base_url),
             ) {
-                Ok(mut reverse_dependencies) => {
+                Ok(reverse_dependencies) => {
                     trace!(
                         "Successfully parsed the local Crate's reverse dependencies as {:?}.",
                         reverse_dependencies
                     );
-                    reverse_dependencies.truncate(1); //TODO remove line after local testing
 
                     let cache = PathBuf::from(concat!(
                         "/tmp/",
@@ -63,6 +63,7 @@ fn main() {
                     }
 
                     let cache_directory = cache.clone().into_os_string();
+                    let mut statistics = Statistics::new();
 
                     for reverse_dependency in reverse_dependencies.iter() {
                         let mut cached_crate = cache.clone();
@@ -203,13 +204,18 @@ fn main() {
                                                             cargo_build.arg("build").current_dir(
                                                                 &cached_crate_directory,
                                                             );
-                                                            info!("Attempting to compile {:?} pointing to the local crate version with the command {:?}.",cached_crate_directory, cargo_build);
+                                                            info!("Attempting to compile {:?} while pointing to the local crate version with the command {:?}.",cached_crate_directory, cargo_build);
 
                                                             match cargo_build.output() {
                                                                 Ok(output) => {
-                                                                    //TODO collect stats
                                                                     if output.status.success() {
+                                                                        info!("Successfully built the crate {:?} while pointing to the local crate version.", cached_crate_directory);
+                                                                        statistics
+                                                                            .increment_successful();
                                                                     } else {
+                                                                        warn!("Failed to build the crate {:?} while pointing to the local crate version.", cached_crate_directory);
+                                                                        statistics
+                                                                            .increment_failed();
                                                                     }
                                                                 }
                                                                 Err(error) => {
@@ -250,7 +256,7 @@ fn main() {
                                         "Skipping {:?}, as unable to compile it unmodified.",
                                         cached_crate_directory
                                     );
-                                    //TODO collect stats
+                                    statistics.increment_skipped();
                                 }
                             }
                             Err(error) => {
@@ -261,7 +267,7 @@ fn main() {
                         }
                     }
 
-                    //TODO print out the stats
+                    statistics.report();
                 }
                 Err(_) => {
                     error!(
