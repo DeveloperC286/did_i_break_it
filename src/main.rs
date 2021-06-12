@@ -5,6 +5,7 @@ extern crate log;
 extern crate lazy_static;
 
 use crate::model::local_crate::LocalCrate;
+use crate::model::reverse_dependencies::ReverseDependencies;
 use std::process::exit;
 use structopt::StructOpt;
 
@@ -20,7 +21,17 @@ fn main() {
     trace!("The command line arguments provided are {:?}.", arguments);
 
     match LocalCrate::from_path(&arguments.local_crate) {
-        Ok(_local_crate) => {}
+        Ok(local_crate) => {
+            match ReverseDependencies::from_url(&local_crate.get_reverse_dependencies_url()) {
+                Ok(_reverse_dependencies) => {}
+                Err(_) => {
+                    error!(
+                        "Unable to query https://crates.io to determine the reverse dependencies."
+                    );
+                    exit(ERROR_EXIT_CODE);
+                }
+            }
+        }
         Err(_) => {
             error!("Unable to parse local crate.");
             exit(ERROR_EXIT_CODE);

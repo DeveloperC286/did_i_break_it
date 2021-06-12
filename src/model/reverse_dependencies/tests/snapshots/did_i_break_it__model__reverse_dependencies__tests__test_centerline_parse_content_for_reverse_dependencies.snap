@@ -1,0 +1,12 @@
+---
+source: src/model/reverse_dependencies/tests/mod.rs
+expression: reverse_dependencies
+
+---
+Ok(
+    [
+        ReverseDependency {
+            name: "toxicblend",
+        },
+    ],
+)
