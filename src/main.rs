@@ -7,9 +7,11 @@ extern crate lazy_static;
 use crate::model::local_crate::LocalCrate;
 use crate::model::reverse_dependencies::ReverseDependencies;
 
-use std::fs::create_dir_all;
+use std::fs::{create_dir_all, remove_dir_all};
 use std::path::PathBuf;
 use std::process::exit;
+use std::process::Command;
+use std::str::from_utf8;
 use structopt::StructOpt;
 
 mod cli;
@@ -58,37 +60,100 @@ fn main() {
                         }
                     }
 
-                    for reverse_dependency in reverse_dependencies.iter() {
-                        let mut crate_cache = cache.clone();
-                        crate_cache.push(format!("{}.crate", reverse_dependency.get_crate_name()));
+                    let cache_directory = cache.clone().into_os_string();
 
-                        if crate_cache.exists() {
-                            trace!("Using the already cached version of {:?}.", crate_cache);
+                    for reverse_dependency in reverse_dependencies.iter() {
+                        let mut cached_crate = cache.clone();
+                        cached_crate.push(format!("{}.crate", reverse_dependency.get_crate_name()));
+
+                        if cached_crate.exists() {
+                            trace!("Using the already cached version of {:?}.", cached_crate);
                         } else {
                             trace!(
                                 "{:?} does not exist, attempting to download crate from CDN.",
-                                crate_cache
+                                cached_crate
                             );
                             let cdn_download_url =
                                 reverse_dependency.get_cdn_download_url(&arguments.cdn_base_url);
                             match crate::utilities::download_url_to_path(
                                 &cdn_download_url,
-                                &crate_cache,
+                                &cached_crate,
                             ) {
                                 Ok(_) => {
                                     trace!(
                                         "Successfully downloaded and cached the crate at {:?}.",
-                                        crate_cache
+                                        cached_crate
                                     );
                                 }
                                 Err(_) => {
                                     trace!(
                                         "Unable to download {:?} to {:?}",
                                         cdn_download_url,
-                                        crate_cache
+                                        cached_crate
                                     );
                                     exit(ERROR_EXIT_CODE);
                                 }
+                            }
+                        }
+
+                        let mut cached_crate_directory = cache.clone();
+                        cached_crate_directory.push(reverse_dependency.get_crate_name());
+
+                        if cached_crate_directory.exists() {
+                            trace!(
+                                "{:?} exist, attempting to delete it.",
+                                cached_crate_directory
+                            );
+                            match remove_dir_all(&cached_crate_directory) {
+                                Ok(_) => {
+                                    trace!(
+                                        "Successfully deleted the directory {:?}.",
+                                        cached_crate_directory
+                                    );
+                                }
+                                Err(error) => {
+                                    error!("{:?}", error);
+                                    error!(
+                                        "Unable to delete the directory {:?}.",
+                                        cached_crate_directory
+                                    );
+                                    exit(ERROR_EXIT_CODE);
+                                }
+                            }
+                        }
+
+                        let mut unpacking = Command::new("tar");
+                        unpacking
+                            .arg("--extract")
+                            .arg("--gzip")
+                            .arg("--file")
+                            .arg(cached_crate.into_os_string())
+                            .arg("--directory")
+                            .arg(&cache_directory);
+                        trace!(
+                            "Attempting to unpack the crate using the command {:?}.",
+                            unpacking
+                        );
+                        match unpacking.output() {
+                            Ok(output) => {
+                                if output.status.success() {
+                                    trace!(
+                                        "Successfully unpacked into the directory {:?}.",
+                                        cached_crate_directory
+                                    );
+                                } else {
+                                    error!("stdout");
+                                    error!("{:?}", from_utf8(&output.stdout));
+                                    error!("stderr");
+                                    error!("{:?}", from_utf8(&output.stderr));
+                                    error!("Unpacking command exited with non-zero exit code.");
+                                    exit(ERROR_EXIT_CODE);
+                                }
+                            }
+                            Err(error) => {
+                                error!("{:?}", error);
+                                error!("Unable to execute the crate unpacking command.");
+                                exit(ERROR_EXIT_CODE);
                             }
                         }
                     }
