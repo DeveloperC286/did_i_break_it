@@ -11,15 +11,16 @@ lazy_static! {
 
 pub fn get_url_content(url: &str) -> Result<String, ()> {
     //TODO enable retries?
+    trace!("Attempting to HTTP GET the URL {:?}.", url);
     match CLIENT.get(url).send() {
         Ok(response) => match response.status() {
             StatusCode::OK => {
-                trace!("Response from {} was OK, attempting to get body.", url);
+                trace!("Response from {:?} was OK, attempting to get content.", url);
                 match response.text() {
                     Ok(body) => Ok(body),
                     Err(error) => {
                         error!("{:?}", error);
-                        error!("Unable to get the body from the response.");
+                        error!("Unable to get the content from the response.");
                         Err(())
                     }
                 }
@@ -34,7 +35,7 @@ pub fn get_url_content(url: &str) -> Result<String, ()> {
         },
         Err(error) => {
             error!("{:?}", error);
-            error!("Unable to make a GET request to {}.", url);
+            error!("Unable to make a HTTP GET request to {:?}.", url);
             Err(())
         }
     }

@@ -22,6 +22,7 @@ impl ReverseDependencies {
         ) {
             Ok(url) => {
                 let url = url.to_string();
+
                 //TODO handle multiple pages.
                 match get_url_content(&url) {
                     Ok(content) => match parse_content_for_reverse_dependencies(&content) {
@@ -58,6 +59,7 @@ fn parse_content_for_reverse_dependencies(content: &str) -> Result<Vec<ReverseDe
 
             match json["versions"].as_array() {
                 Some(reverse_dependencies_versions) => {
+                    trace!("JSON content has a segment called versions as an Array.");
                     let mut reverse_dependencies = vec![];
 
                     for reverse_dependant in reverse_dependencies_versions {

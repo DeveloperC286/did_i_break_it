@@ -22,8 +22,17 @@ fn main() {
 
     match LocalCrate::from_path(&arguments.local_crate) {
         Ok(local_crate) => {
+            trace!(
+                "Successfully parsed the local Crate's information as {:?}.",
+                local_crate
+            );
             match ReverseDependencies::from_url(&local_crate.get_reverse_dependencies_url()) {
-                Ok(_reverse_dependencies) => {}
+                Ok(reverse_dependencies) => {
+                    trace!(
+                        "Successfully parsed the local Crate's reverse dependencies as {:?}.",
+                        reverse_dependencies
+                    );
+                }
                 Err(_) => {
                     error!(
                         "Unable to query https://crates.io to determine the reverse dependencies."
