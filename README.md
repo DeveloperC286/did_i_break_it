@@ -67,7 +67,7 @@ Rather than pinning to a specific version you can specify the major or minor ver
 e.g.
 
 ```
-cargo install did_i_break_it--version ^2
+cargo install did_i_break_it --version ^2
 ```
 
 Will download the latest `2.*` release whether that is `2.0.7` or `2.6.0`.
