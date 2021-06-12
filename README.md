@@ -4,7 +4,7 @@
 
 A tooling for checking your [https://crates.io](https://crates.io) library's reverse dependencies with your local version.
 
-__NOTE - Only supports UNIX like environments.__
+__NOTE - Only Unix like enviroments are supported.__
 
 
 ## Content

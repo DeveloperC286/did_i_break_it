@@ -27,6 +27,11 @@ fn main() {
     let arguments = cli::Arguments::from_args();
     trace!("The command line arguments provided are {:?}.", arguments);
 
+    if cfg!(windows) {
+        error!("Only Unix like enviroments are supported.");
+        exit(ERROR_EXIT_CODE);
+    }
+
     match LocalCrate::from_path(&arguments.local_crate) {
         Ok(local_crate) => {
             trace!(
