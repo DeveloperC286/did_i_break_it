@@ -51,6 +51,19 @@ impl ReverseDependency {
             }
         }
     }
+
+    pub fn get_crate_name(&self) -> String {
+        format!("{}-{}", self.name, self.version)
+    }
+
+    pub fn get_cdn_download_url(&self, cdn_base_url: &str) -> String {
+        format!(
+            "{}/crates/{}/{}.crate",
+            cdn_base_url,
+            self.name,
+            self.get_crate_name()
+        )
+    }
 }
 
 #[cfg(test)]

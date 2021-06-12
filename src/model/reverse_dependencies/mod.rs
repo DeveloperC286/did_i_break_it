@@ -7,12 +7,10 @@ pub mod reverse_dependency;
 use crate::model::reverse_dependencies::reverse_dependency::ReverseDependency;
 
 #[derive(Debug)]
-pub struct ReverseDependencies {
-    reverse_dependencies: Vec<ReverseDependency>,
-}
+pub struct ReverseDependencies {}
 
 impl ReverseDependencies {
-    pub fn from_url(base_url: &str) -> Result<Self, ()> {
+    pub fn from_url(base_url: &str) -> Result<Vec<ReverseDependency>, ()> {
         let page = 1;
 
         match Url::parse_with_params(
@@ -25,9 +23,7 @@ impl ReverseDependencies {
                 //TODO handle multiple pages.
                 match get_url_content(&url) {
                     Ok(content) => match ReverseDependency::from(&content) {
-                        Ok(reverse_dependencies) => Ok(ReverseDependencies {
-                            reverse_dependencies,
-                        }),
+                        Ok(reverse_dependencies) => Ok(reverse_dependencies),
                         Err(_) => {
                             error!("Unable to parse the content for the reverse dependencies.");
                             Err(())
