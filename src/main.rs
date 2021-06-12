@@ -198,8 +198,26 @@ fn main() {
                                                         .as_bytes(),
                                                     ) {
                                                         Ok(_) => {
-                                                            //TODO cargo build
-                                                            //TODO collect stats
+                                                            let mut cargo_build =
+                                                                Command::new("cargo");
+                                                            cargo_build.arg("build").current_dir(
+                                                                &cached_crate_directory,
+                                                            );
+                                                            info!("Attempting to compile {:?} pointing to the local crate version with the command {:?}.",cached_crate_directory, cargo_build);
+
+                                                            match cargo_build.output() {
+                                                                Ok(output) => {
+                                                                    //TODO collect stats
+                                                                    if output.status.success() {
+                                                                    } else {
+                                                                    }
+                                                                }
+                                                                Err(error) => {
+                                                                    error!("{:?}", error);
+                                                                    error!("Unable to execute the crate building command.");
+                                                                    exit(ERROR_EXIT_CODE);
+                                                                }
+                                                            }
                                                         }
                                                         Err(error) => {
                                                             error!("{:?}", error);
@@ -232,6 +250,7 @@ fn main() {
                                         "Skipping {:?}, as unable to compile it unmodified.",
                                         cached_crate_directory
                                     );
+                                    //TODO collect stats
                                 }
                             }
                             Err(error) => {
