@@ -26,7 +26,9 @@ fn main() {
                 "Successfully parsed the local Crate's information as {:?}.",
                 local_crate
             );
-            match ReverseDependencies::from_url(&local_crate.get_reverse_dependencies_url()) {
+            match ReverseDependencies::from_url(
+                &local_crate.get_reverse_dependencies_url(&arguments.api_base_url),
+            ) {
                 Ok(reverse_dependencies) => {
                     trace!(
                         "Successfully parsed the local Crate's reverse dependencies as {:?}.",
@@ -35,7 +37,8 @@ fn main() {
                 }
                 Err(_) => {
                     error!(
-                        "Unable to query https://crates.io to determine the reverse dependencies."
+                        "Unable to query {:?} to determine the reverse dependencies.",
+                        &arguments.api_base_url
                     );
                     exit(ERROR_EXIT_CODE);
                 }

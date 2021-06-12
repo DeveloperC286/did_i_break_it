@@ -6,7 +6,7 @@ expression: reverse_dependencies
 Ok(
     [
         ReverseDependency {
-            name: "toxicblend",
+            download_path: "/api/v1/crates/toxicblend/0.0.10/download",
         },
     ],
 )

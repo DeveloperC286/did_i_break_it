@@ -56,10 +56,10 @@ impl LocalCrate {
         }
     }
 
-    pub fn get_reverse_dependencies_url(&self) -> String {
+    pub fn get_reverse_dependencies_url(&self, api_base_url: &str) -> String {
         format!(
-            "https://crates.io/api/v1/crates/{}/reverse_dependencies",
-            self.package_name
+            "{}/api/v1/crates/{}/reverse_dependencies",
+            api_base_url, self.package_name
         )
     }
 }

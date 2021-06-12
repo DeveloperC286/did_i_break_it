@@ -12,4 +12,11 @@ pub struct Arguments {
         default_value = "."
     )]
     pub local_crate: String,
+
+    #[structopt(
+        long,
+        help = "The base URL of the API to be querying for reverse dependencies and crates.",
+        default_value = "https://crates.io"
+    )]
+    pub api_base_url: String,
 }
