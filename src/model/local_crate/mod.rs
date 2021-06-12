@@ -62,4 +62,8 @@ impl LocalCrate {
             api_base_url, self.package_name
         )
     }
+
+    pub fn get_canonicalized_path(&self) -> String {
+        self.canonicalized_path.clone()
+    }
 }

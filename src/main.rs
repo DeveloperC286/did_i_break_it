@@ -7,7 +7,8 @@ extern crate lazy_static;
 use crate::model::local_crate::LocalCrate;
 use crate::model::reverse_dependencies::ReverseDependencies;
 
-use std::fs::{create_dir_all, remove_dir_all};
+use std::fs::{create_dir_all, remove_dir_all, File};
+use std::io::Write;
 use std::path::PathBuf;
 use std::process::exit;
 use std::process::Command;
@@ -34,11 +35,12 @@ fn main() {
             match ReverseDependencies::from_url(
                 &local_crate.get_reverse_dependencies_url(&arguments.api_base_url),
             ) {
-                Ok(reverse_dependencies) => {
+                Ok(mut reverse_dependencies) => {
                     trace!(
                         "Successfully parsed the local Crate's reverse dependencies as {:?}.",
                         reverse_dependencies
                     );
+                    reverse_dependencies.truncate(1); //TODO remove line after local testing
 
                     let cache = PathBuf::from(concat!(
                         "/tmp/",
@@ -50,11 +52,11 @@ fn main() {
                     if !cache.exists() {
                         match create_dir_all(&cache) {
                             Ok(()) => {
-                                trace!("Successfully created the caching directory {:?}.", cache);
+                                trace!("Successfully created the directory {:?}.", cache);
                             }
                             Err(error) => {
                                 error!("{:?}", error);
-                                error!("Unable to create the directory {:?} to be used for package caching.", cache);
+                                error!("Unable to create the directory {:?}.", cache);
                                 exit(ERROR_EXIT_CODE);
                             }
                         }
@@ -158,21 +160,73 @@ fn main() {
                         cargo_build
                             .arg("build")
                             .current_dir(&cached_crate_directory);
-                        trace!(
+                        info!(
                             "Attempting to compile {:?} with the command {:?}.",
-                            cached_crate_directory,
-                            cargo_build
+                            cached_crate_directory, cargo_build
                         );
                         match cargo_build.output() {
                             Ok(output) => {
                                 if output.status.success() {
-                                    trace!(
+                                    info!(
                                         "Successfully built the crate {:?}.",
                                         cached_crate_directory
                                     );
-                                    //TODO now try with the local version.
+                                    let mut cached_crate_override = cached_crate_directory.clone();
+                                    cached_crate_override.push(".cargo");
 
-                                    //TODO collect stats
+                                    match create_dir_all(&cached_crate_override) {
+                                        Ok(()) => {
+                                            trace!(
+                                                "Successfully created the directory {:?}.",
+                                                cached_crate_override
+                                            );
+
+                                            cached_crate_override.push("config.toml");
+
+                                            match File::create(&cached_crate_override) {
+                                                Ok(mut override_file) => {
+                                                    trace!(
+                                                        "Successfully created the file {:?}.",
+                                                        cached_crate_override
+                                                    );
+
+                                                    match override_file.write_all(
+                                                        format!(
+                                                            "paths = [\"{}\"]",
+                                                            local_crate.get_canonicalized_path()
+                                                        )
+                                                        .as_bytes(),
+                                                    ) {
+                                                        Ok(_) => {
+                                                            //TODO cargo build
+                                                            //TODO collect stats
+                                                        }
+                                                        Err(error) => {
+                                                            error!("{:?}", error);
+                                                            error!(
+                                                                "Unable to write to the fie {:?}.",
+                                                                override_file
+                                                            );
+                                                            exit(ERROR_EXIT_CODE);
+                                                        }
+                                                    }
+                                                }
+                                                Err(error) => {
+                                                    error!("{:?}", error);
+                                                    error!(
+                                                        "Unable to create the file {:?}.",
+                                                        cached_crate_override
+                                                    );
+                                                    exit(ERROR_EXIT_CODE);
+                                                }
+                                            }
+                                        }
+                                        Err(error) => {
+                                            error!("{:?}", error);
+                                            error!("Unable to create the directory {:?}.", cache);
+                                            exit(ERROR_EXIT_CODE);
+                                        }
+                                    }
                                 } else {
                                     warn!(
                                         "Skipping {:?}, as unable to compile it unmodified.",
