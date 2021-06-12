@@ -1,5 +1,5 @@
 ---
-source: src/model/reverse_dependencies/tests/mod.rs
+source: src/model/reverse_dependencies/reverse_dependency/tests/mod.rs
 expression: reverse_dependencies
 
 ---
