@@ -73,7 +73,7 @@ compiling:
     - cargo build --verbose --workspace --no-default-features
   rules:
     - if: $CI_MERGE_REQUEST_ID
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "main"
 
 
 unit-testing:
@@ -85,7 +85,7 @@ unit-testing:
     - cargo test --verbose --workspace --no-default-features
   rules:
     - if: $CI_MERGE_REQUEST_ID
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "main"
 
 
 releasing:
@@ -114,7 +114,7 @@ releasing:
       --tag-name $CURRENT_VERSION
       --ref $CI_COMMIT_SHA
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "main"
 
 
 crates-io-publishing:
