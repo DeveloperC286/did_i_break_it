@@ -142,10 +142,7 @@ fn main() {
                                         cached_crate_directory
                                     );
                                 } else {
-                                    error!("stdout");
-                                    error!("{:?}", from_utf8(&output.stdout));
-                                    error!("stderr");
-                                    error!("{:?}", from_utf8(&output.stderr));
+                                    error!("{}", from_utf8(&output.stderr).unwrap());
                                     error!("Unpacking command exited with non-zero exit code.");
                                     exit(ERROR_EXIT_CODE);
                                 }
@@ -156,7 +153,42 @@ fn main() {
                                 exit(ERROR_EXIT_CODE);
                             }
                         }
+
+                        let mut cargo_build = Command::new("cargo");
+                        cargo_build
+                            .arg("build")
+                            .current_dir(&cached_crate_directory);
+                        trace!(
+                            "Attempting to compile {:?} with the command {:?}.",
+                            cached_crate_directory,
+                            cargo_build
+                        );
+                        match cargo_build.output() {
+                            Ok(output) => {
+                                if output.status.success() {
+                                    trace!(
+                                        "Successfully built the crate {:?}.",
+                                        cached_crate_directory
+                                    );
+                                    //TODO now try with the local version.
+
+                                    //TODO collect stats
+                                } else {
+                                    warn!(
+                                        "Skipping {:?}, as unable to compile it unmodified.",
+                                        cached_crate_directory
+                                    );
+                                }
+                            }
+                            Err(error) => {
+                                error!("{:?}", error);
+                                error!("Unable to execute the crate building command.");
+                                exit(ERROR_EXIT_CODE);
+                            }
+                        }
                     }
+
+                    //TODO print out the stats
                 }
                 Err(_) => {
                     error!(
