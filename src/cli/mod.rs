@@ -19,4 +19,11 @@ pub struct Arguments {
         default_value = "https://crates.io"
     )]
     pub api_base_url: String,
+
+    #[structopt(
+        long,
+        help = "The base URL of the CDN to download the reverse dependencies from.",
+        default_value = "https://static.crates.io"
+    )]
+    pub cdn_base_url: String,
 }

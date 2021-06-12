@@ -6,6 +6,9 @@ extern crate lazy_static;
 
 use crate::model::local_crate::LocalCrate;
 use crate::model::reverse_dependencies::ReverseDependencies;
+
+use std::fs::create_dir_all;
+use std::path::PathBuf;
 use std::process::exit;
 use structopt::StructOpt;
 
@@ -34,6 +37,26 @@ fn main() {
                         "Successfully parsed the local Crate's reverse dependencies as {:?}.",
                         reverse_dependencies
                     );
+
+                    let cache = PathBuf::from(concat!(
+                        "/tmp/",
+                        env!("CARGO_PKG_NAME"),
+                        "-",
+                        env!("CARGO_PKG_VERSION")
+                    ));
+
+                    if !cache.exists() {
+                        match create_dir_all(&cache) {
+                            Ok(()) => {
+                                trace!("Successfully created the caching directory {:?}.", cache);
+                            }
+                            Err(error) => {
+                                error!("{:?}", error);
+                                error!("Unable to create the directory {:?} to be used for package caching.", cache);
+                                exit(ERROR_EXIT_CODE);
+                            }
+                        }
+                    }
                 }
                 Err(_) => {
                     error!(

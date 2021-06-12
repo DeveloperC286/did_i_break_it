@@ -6,10 +6,12 @@ expression: reverse_dependencies
 Ok(
     [
         ReverseDependency {
-            download_path: "/api/v1/crates/tesseract/0.9.0/download",
+            name: "tesseract",
+            version: "0.9.0",
         },
         ReverseDependency {
-            download_path: "/api/v1/crates/tesseract-plumbing/0.5.1/download",
+            name: "tesseract-plumbing",
+            version: "0.5.1",
         },
     ],
 )

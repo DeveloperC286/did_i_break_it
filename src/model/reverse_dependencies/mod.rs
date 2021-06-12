@@ -9,7 +9,8 @@ pub struct ReverseDependencies {
 
 #[derive(Debug)]
 pub struct ReverseDependency {
-    download_path: String,
+    name: String,
+    version: String,
 }
 
 impl ReverseDependencies {
@@ -63,14 +64,21 @@ fn parse_content_for_reverse_dependencies(content: &str) -> Result<Vec<ReverseDe
                     let mut reverse_dependencies = vec![];
 
                     for reverse_dependant in reverse_dependencies_versions {
-                        match reverse_dependant["dl_path"].as_str() {
-                            Some(download_path) => {
-                                reverse_dependencies.push(ReverseDependency {
-                                    download_path: download_path.to_string(),
-                                });
-                            }
+                        match reverse_dependant["crate"].as_str() {
+                            Some(name) => match reverse_dependant["num"].as_str() {
+                                Some(version) => {
+                                    reverse_dependencies.push(ReverseDependency {
+                                        name: name.to_string(),
+                                        version: version.to_string(),
+                                    });
+                                }
+                                None => {
+                                    error!("JSON content does not have a 'versions[].num' segement that matches the expected form.");
+                                    return Err(());
+                                }
+                            },
                             None => {
-                                error!("JSON content does not have a 'versions[].dl_path' segement that matches the expected form.");
+                                error!("JSON content does not have a 'versions[].crate' segement that matches the expected form.");
                                 return Err(());
                             }
                         }
