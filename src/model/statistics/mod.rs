@@ -33,4 +33,12 @@ impl Statistics {
     pub fn increment_successful(&mut self) {
         self.successful += 1;
     }
+
+    pub fn get_exit_code(&self) -> i32 {
+        if self.failed > 0 {
+            1
+        } else {
+            0
+        }
+    }
 }

@@ -273,6 +273,7 @@ fn main() {
                     }
 
                     statistics.report();
+                    exit(statistics.get_exit_code());
                 }
                 Err(_) => {
                     error!(
