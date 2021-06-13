@@ -4,7 +4,16 @@
 
 A tooling for checking your [https://crates.io](https://crates.io) library's reverse dependencies with your local version.
 
-__NOTE - Only Unix like enviroments are supported.__
+__NOTE - Only Unix like environments are supported.__
+
+
+## Todo
+ * Enable API/download retrying if request fails.
+ * Handle more than one page of reverse dependencies.
+ * Lean mode, which cleans up between each reverse dependency.
+ * Save the stdout and stderr of failed compilations.
+ * Writing results to HTML?
+ * Parse reverse dependencies Semantic Versioning and only compiling if local version is acceptable.
 
 
 ## Content

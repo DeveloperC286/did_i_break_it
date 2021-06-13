@@ -29,7 +29,7 @@ fn main() {
     trace!("The command line arguments provided are {:?}.", arguments);
 
     if cfg!(windows) {
-        error!("Only Unix like enviroments are supported.");
+        error!("Only Unix like environments are supported.");
         exit(ERROR_EXIT_CODE);
     }
 
