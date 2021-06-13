@@ -47,12 +47,7 @@ fn main() {
                         reverse_dependencies
                     );
 
-                    let cache = PathBuf::from(concat!(
-                        "/tmp/",
-                        env!("CARGO_PKG_NAME"),
-                        "-",
-                        env!("CARGO_PKG_VERSION")
-                    ));
+                    let cache = PathBuf::from(concat!("/tmp/", env!("CARGO_PKG_NAME"),));
 
                     if !cache.exists() {
                         match create_dir_all(&cache) {
