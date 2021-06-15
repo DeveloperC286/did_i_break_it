@@ -217,6 +217,49 @@ fn main() {
                                                                         warn!("Failed to build the crate {:?} while pointing to the local crate version.", cached_crate_directory);
                                                                         statistics
                                                                             .increment_failed();
+
+                                                                        let mut cached_crate_stderr =
+                                                                            cache_directory.clone();
+                                                                        cached_crate_stderr.push(
+                                                                            &format!(
+                                                                                "{}.stderr",
+                                                                                reverse_dependency
+                                                                                    .get_crate_name(
+                                                                                    )
+                                                                            ),
+                                                                        );
+
+                                                                        match File::create(
+                                                                            &cached_crate_stderr,
+                                                                        ) {
+                                                                            Ok(mut stderr_file) => {
+                                                                                trace!("Successfully created the file {:?}.", cached_crate_stderr);
+
+                                                                                match stderr_file
+                                                                                    .write_all(
+                                                                                        &output
+                                                                                            .stderr,
+                                                                                    ) {
+                                                                                    Ok(_) => {
+                                                                                        trace!("Written the stderr to {:?}.", cached_crate_stderr);
+                                                                                    }
+                                                                                    Err(error) => {
+                                                                                        error!(
+                                                                                            "{:?}",
+                                                                                            error
+                                                                                        );
+                                                                                        trace!("Failed to write stderr to the file {:?}.", cached_crate_stderr);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            Err(error) => {
+                                                                                error!(
+                                                                                    "{:?}",
+                                                                                    error
+                                                                                );
+                                                                                trace!("Failed to create the file {:?}.", cached_crate_stderr);
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
                                                                 Err(error) => {
@@ -229,7 +272,7 @@ fn main() {
                                                         Err(error) => {
                                                             error!("{:?}", error);
                                                             error!(
-                                                                "Unable to write to the fie {:?}.",
+                                                                "Unable to write to the file {:?}.",
                                                                 override_file
                                                             );
                                                             exit(ERROR_EXIT_CODE);
