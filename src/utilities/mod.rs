@@ -1,7 +1,8 @@
-use http::StatusCode;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
+
+use http::StatusCode;
 
 static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 

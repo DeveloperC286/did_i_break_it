@@ -1,12 +1,8 @@
-extern crate pretty_env_logger;
-#[macro_use]
-extern crate log;
 #[macro_use]
 extern crate lazy_static;
-
-use crate::model::local_crate::LocalCrate;
-use crate::model::reverse_dependencies::ReverseDependencies;
-use crate::model::statistics::Statistics;
+#[macro_use]
+extern crate log;
+extern crate pretty_env_logger;
 
 use std::fs::{create_dir_all, remove_dir_all, File};
 use std::io::Write;
@@ -14,7 +10,12 @@ use std::path::PathBuf;
 use std::process::exit;
 use std::process::Command;
 use std::str::from_utf8;
+
 use structopt::StructOpt;
+
+use crate::model::local_crate::LocalCrate;
+use crate::model::reverse_dependencies::ReverseDependencies;
+use crate::model::statistics::Statistics;
 
 mod cli;
 mod model;

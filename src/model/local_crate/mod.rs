@@ -1,5 +1,6 @@
-use cargo_toml::Manifest;
 use std::path::PathBuf;
+
+use cargo_toml::Manifest;
 
 #[derive(Debug)]
 pub struct LocalCrate {

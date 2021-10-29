@@ -1,10 +1,9 @@
 use url::Url;
 
+use crate::model::reverse_dependencies::reverse_dependency::ReverseDependency;
 use crate::utilities::get_url_content;
 
 pub mod reverse_dependency;
-
-use crate::model::reverse_dependencies::reverse_dependency::ReverseDependency;
 
 #[derive(Debug)]
 pub struct ReverseDependencies {}
