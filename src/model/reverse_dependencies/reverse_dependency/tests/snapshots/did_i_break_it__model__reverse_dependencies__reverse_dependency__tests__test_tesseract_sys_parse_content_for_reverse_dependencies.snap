@@ -8,10 +8,12 @@ Ok(
         ReverseDependency {
             name: "tesseract",
             version: "0.9.0",
+            version_required: "^0.5.3",
         },
         ReverseDependency {
             name: "tesseract-plumbing",
             version: "0.5.1",
+            version_required: "^0.5.5",
         },
     ],
 )

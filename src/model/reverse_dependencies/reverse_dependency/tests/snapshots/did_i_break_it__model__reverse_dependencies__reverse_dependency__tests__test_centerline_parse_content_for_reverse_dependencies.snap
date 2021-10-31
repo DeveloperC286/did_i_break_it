@@ -8,6 +8,7 @@ Ok(
         ReverseDependency {
             name: "toxicblend",
             version: "0.0.10",
+            version_required: "^0.4.1",
         },
     ],
 )

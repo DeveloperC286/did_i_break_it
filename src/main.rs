@@ -42,6 +42,7 @@ fn main() {
             );
             match ReverseDependencies::from_url(
                 &local_crate.get_reverse_dependencies_url(&arguments.api_base_url),
+                local_crate.get_version(),
             ) {
                 Ok(reverse_dependencies) => {
                     let cache = PathBuf::from(concat!("/tmp/", env!("CARGO_PKG_NAME"),));

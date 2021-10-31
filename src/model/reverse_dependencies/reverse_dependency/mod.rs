@@ -1,7 +1,10 @@
+use std::collections::HashMap;
+
 #[derive(Debug)]
 pub struct ReverseDependency {
     name: String,
     version: String,
+    version_required: String,
 }
 
 impl ReverseDependency {
@@ -10,20 +13,57 @@ impl ReverseDependency {
             Ok(json) => {
                 trace!("Succesfully parsed content into JSON.");
 
+                let mut required_versions: HashMap<u64, String> = HashMap::new();
+                match json["dependencies"].as_array() {
+                    Some(crate_required_versions) => {
+                        for required_version in crate_required_versions {
+                            // as_u64
+                            match required_version["version_id"].as_u64() {
+                                Some(version_id) => match required_version["req"].as_str() {
+                                    Some(req) => {
+                                        required_versions.insert(version_id, req.to_string());
+                                    }
+                                    None => {
+                                        error!("JSON content does not have a 'dependencies[].req' segement that matches the expected form.");
+                                        return Err(());
+                                    }
+                                },
+                                None => {
+                                    error!("JSON content does not have a 'dependencies[].version_id' segement that matches the expected form.");
+                                    return Err(());
+                                }
+                            }
+                        }
+                    }
+                    None => {
+                        error!("JSON content does not have a 'dependencies[]' segement that matches the expected form.");
+                        return Err(());
+                    }
+                }
+
                 match json["versions"].as_array() {
                     Some(reverse_dependencies_versions) => {
-                        trace!("JSON content has a segment called versions as an Array.");
                         let mut reverse_dependencies = vec![];
 
                         for reverse_dependant in reverse_dependencies_versions {
                             match reverse_dependant["crate"].as_str() {
                                 Some(name) => match reverse_dependant["num"].as_str() {
-                                    Some(version) => {
-                                        reverse_dependencies.push(ReverseDependency {
-                                            name: name.to_string(),
-                                            version: version.to_string(),
-                                        });
-                                    }
+                                    Some(version) => match reverse_dependant["id"].as_u64() {
+                                        Some(required_version_id) => {
+                                            reverse_dependencies.push(ReverseDependency {
+                                                name: name.to_string(),
+                                                version: version.to_string(),
+                                                version_required: required_versions
+                                                    .get(&required_version_id)
+                                                    .unwrap()
+                                                    .clone(),
+                                            });
+                                        }
+                                        None => {
+                                            error!("JSON content does not have a 'versions[].id' segement that matches the expected form.");
+                                            return Err(());
+                                        }
+                                    },
                                     None => {
                                         error!("JSON content does not have a 'versions[].num' segement that matches the expected form.");
                                         return Err(());
@@ -63,6 +103,10 @@ impl ReverseDependency {
             self.name,
             self.get_crate_name()
         )
+    }
+
+    pub fn get_version_required(&self) -> &str {
+        &self.version_required
     }
 }
 

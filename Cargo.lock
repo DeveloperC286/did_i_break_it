@@ -145,7 +145,7 @@ checksum = "5827cebf4670468b8772dd191856768aedcb1b0278a04f989f7766351917b9dc"
 
 [[package]]
 name = "did_i_break_it"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "cargo_toml",
  "console 0.15.0",
@@ -155,6 +155,7 @@ dependencies = [
  "log",
  "pretty_env_logger",
  "reqwest",
+ "semver",
  "serde",
  "serde_json",
  "structopt",
@@ -845,6 +846,12 @@ dependencies = [
  "core-foundation-sys",
  "libc",
 ]
+
+[[package]]
+name = "semver"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "568a8e6258aa33c13358f81fd834adb854c6f7c9468520910a9b1e8fac068012"
 
 [[package]]
 name = "serde"

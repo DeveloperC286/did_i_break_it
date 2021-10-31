@@ -5,7 +5,8 @@ use cargo_toml::Manifest;
 #[derive(Debug)]
 pub struct LocalCrate {
     canonicalized_path: String,
-    package_name: String,
+    name: String,
+    version: String,
 }
 
 impl LocalCrate {
@@ -23,7 +24,8 @@ impl LocalCrate {
                                 Ok(manifest) => match manifest.package {
                                     Some(package) => Ok(LocalCrate {
                                         canonicalized_path: canonicalized_path.to_string(),
-                                        package_name: package.name,
+                                        name: package.name,
+                                        version: package.version,
                                     }),
                                     None => {
                                         error!("No package inside the Cargo.toml manifest.");
@@ -60,11 +62,15 @@ impl LocalCrate {
     pub fn get_reverse_dependencies_url(&self, api_base_url: &str) -> String {
         format!(
             "{}/api/v1/crates/{}/reverse_dependencies",
-            api_base_url, self.package_name
+            api_base_url, self.name
         )
     }
 
     pub fn get_canonicalized_path(&self) -> String {
         self.canonicalized_path.clone()
+    }
+
+    pub fn get_version(&self) -> &str {
+        &self.version
     }
 }

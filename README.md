@@ -10,7 +10,6 @@ __NOTE - Only Unix like environments are supported.__
 ## Todo
  * Enable API/download retrying if request fails.
  * Lean mode, which cleans up between each reverse dependency.
- * Parse reverse dependencies Semantic Versioning and only compiling if local version is acceptable.
 
 
 ## Content
