@@ -10,7 +10,9 @@ use std::path::PathBuf;
 use std::process::exit;
 use std::process::Command;
 use std::str::from_utf8;
+use std::sync::{Arc, Mutex};
 
+use rayon::prelude::*;
 use structopt::StructOpt;
 
 use crate::model::local_crate::LocalCrate;
@@ -61,9 +63,9 @@ fn main() {
                     }
 
                     let cache_directory = cache.clone().into_os_string();
-                    let mut statistics = Statistics::new();
+                    let statistics = Arc::new(Mutex::new(Statistics::new()));
 
-                    for reverse_dependency in reverse_dependencies.iter() {
+                    reverse_dependencies.into_par_iter().for_each(|reverse_dependency| {
                         let mut cached_crate = cache.clone();
                         cached_crate.push(format!("{}.crate", reverse_dependency.get_crate_name()));
 
@@ -209,10 +211,12 @@ fn main() {
                                                                     if output.status.success() {
                                                                         info!("Successfully built the crate {:?} while pointing to the local crate version.", cached_crate_directory);
                                                                         statistics
+                                                                            .lock().unwrap()
                                                                             .increment_successful();
                                                                     } else {
                                                                         warn!("Failed to build the crate {:?} while pointing to the local crate version.", cached_crate_directory);
                                                                         statistics
+                                                                            .lock().unwrap()
                                                                             .increment_failed();
 
                                                                         let mut cached_crate_stderr =
@@ -297,7 +301,7 @@ fn main() {
                                         "Skipping {:?}, as unable to compile it unmodified.",
                                         cached_crate_directory
                                     );
-                                    statistics.increment_skipped();
+                                    statistics.lock().unwrap().increment_skipped();
                                 }
                             }
                             Err(error) => {
@@ -306,10 +310,10 @@ fn main() {
                                 exit(ERROR_EXIT_CODE);
                             }
                         }
-                    }
+                    });
 
-                    statistics.report();
-                    exit(statistics.get_exit_code());
+                    statistics.lock().unwrap().report();
+                    exit(statistics.lock().unwrap().get_exit_code());
                 }
                 Err(_) => {
                     error!(
