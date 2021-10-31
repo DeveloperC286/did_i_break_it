@@ -44,11 +44,6 @@ fn main() {
                 &local_crate.get_reverse_dependencies_url(&arguments.api_base_url),
             ) {
                 Ok(reverse_dependencies) => {
-                    trace!(
-                        "Successfully parsed the local Crate's reverse dependencies as {:?}.",
-                        reverse_dependencies
-                    );
-
                     let cache = PathBuf::from(concat!("/tmp/", env!("CARGO_PKG_NAME"),));
 
                     if !cache.exists() {
