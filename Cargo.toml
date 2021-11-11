@@ -2,7 +2,7 @@
 name = "did_i_break_it"
 version = "0.6.0"
 authors = ["DeveloperC <DeveloperC@protonmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "AGPL-3.0"
 description = "A tooling for checking your https://crates.io library's reverse dependencies with your local version."
 repository = "https://gitlab.com/DeveloperC/did_i_break_it"
