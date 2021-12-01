@@ -196,7 +196,7 @@ fn main() {
                                                             "paths = [\"{}\"]",
                                                             local_crate.get_canonicalized_path()
                                                         )
-                                                        .as_bytes(),
+                                                            .as_bytes(),
                                                     ) {
                                                         Ok(_) => {
                                                             let mut cargo_build =
@@ -225,8 +225,7 @@ fn main() {
                                                                             &format!(
                                                                                 "{}.stderr",
                                                                                 reverse_dependency
-                                                                                    .get_crate_name(
-                                                                                    )
+                                                                                    .get_crate_name()
                                                                             ),
                                                                         );
 
