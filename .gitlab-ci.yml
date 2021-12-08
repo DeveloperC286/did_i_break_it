@@ -58,7 +58,7 @@ formatting:
   before_script:
     - rustup component add rustfmt
   script:
-    - cargo fmt --all -- --check
+    - cargo fmt --all -- --check --config=group_imports=StdExternalCrate
   rules:
     - if: $CI_MERGE_REQUEST_ID
 
