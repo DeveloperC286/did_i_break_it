@@ -1,6 +1,6 @@
 [package]
 name = "did_i_break_it"
-version = "0.6.0"
+version = "0.7.0"
 authors = ["DeveloperC <DeveloperC@protonmail.com>"]
 edition = "2021"
 license = "AGPL-3.0"
@@ -42,6 +42,9 @@ console = "0.15.0"
 
 # For multiple threads.
 rayon = "1.5.1"
+
+# For progress bar
+indicatif = "0.16.2"
 
 
 [dev-dependencies]

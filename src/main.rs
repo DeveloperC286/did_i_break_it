@@ -12,6 +12,7 @@ use std::process::Command;
 use std::str::from_utf8;
 use std::sync::{Arc, Mutex};
 
+use indicatif::ProgressBar;
 use rayon::prelude::*;
 use structopt::StructOpt;
 
@@ -65,7 +66,13 @@ fn main() {
                     let cache_directory = cache.clone().into_os_string();
                     let statistics = Arc::new(Mutex::new(Statistics::new()));
 
+                    let progress = Arc::new(Mutex::new(ProgressBar::new(
+                        reverse_dependencies.len() as u64,
+                    )));
+
                     reverse_dependencies.into_par_iter().for_each(|reverse_dependency| {
+                        progress.lock().unwrap().inc(1);
+
                         let mut cached_crate = cache.clone();
                         cached_crate.push(format!("{}.crate", reverse_dependency.get_crate_name()));
 
@@ -311,6 +318,7 @@ fn main() {
                         }
                     });
 
+                    progress.lock().unwrap().finish();
                     statistics.lock().unwrap().report();
                     exit(statistics.lock().unwrap().get_exit_code());
                 }
