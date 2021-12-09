@@ -76,10 +76,6 @@ impl ReverseDependencies {
         }
 
         let before_filtering_reverse_dependencies_len = reverse_dependencies.len();
-        trace!(
-            "Found {:?} reverse dependencies.",
-            before_filtering_reverse_dependencies_len
-        );
 
         reverse_dependencies = reverse_dependencies
             .into_iter()
@@ -100,9 +96,16 @@ impl ReverseDependencies {
             })
             .collect();
 
+        let after_filtering_reverse_dependencies_len = reverse_dependencies.len();
+
         trace!(
-            "{:?} reverse dependencies filtered out.",
-            before_filtering_reverse_dependencies_len - reverse_dependencies.len()
+            "Filtered out {:?} reverse dependencies.",
+            before_filtering_reverse_dependencies_len - after_filtering_reverse_dependencies_len
+        );
+
+        trace!(
+            "{:?} remaining reverse dependencies.",
+            after_filtering_reverse_dependencies_len
         );
 
         Ok(reverse_dependencies)
