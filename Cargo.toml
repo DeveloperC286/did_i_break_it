@@ -12,39 +12,40 @@ categories = ["command-line-utilities", "development-tools"]
 
 
 [dependencies]
-# CLI parsing
+# For CLI parsing.
 structopt = "0.3.25"
 
-# Logging
+# For logging.
 log = "0.4.14"
 pretty_env_logger = "0.4.0"
 
-# For reading Cargo.toml files
-cargo_toml = "0.10.1"
+# For reading Cargo.toml files.
+cargo_toml = "0.10.2"
 
-# For comparing the semantic verions
+# For Semantic Versioning parsing.
 semver = "1.0.4"
 
-# For defining statics that require code to be executed
+# For defining a static HTTP client.
 lazy_static = "1.4.0"
 
-# For making HTTP requests to the crates.io API
-reqwest = { version = "0.11.6", features = ["blocking"] }
+# For making HTTP requests to the crates.io API.
+reqwest = { version = "0.11.7", features = ["blocking"] }
 http = "0.2.5"
 url = "2.2.2"
 
-# For parsing crates.io API responses
-serde = "1.0.130"
-serde_json = "1.0.68"
+# For parsing crates.io's API responses.
+serde = "1.0.132"
+serde_json = "1.0.73"
 
-# For fancy console output
+# For fancy console output.
 console = "0.15.0"
 
-# For thread pools
+# For multiple threads.
 rayon = "1.5.1"
 
 
 [dev-dependencies]
+# For snapshot testing.
 insta = "1.8.0"
 
 
