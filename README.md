@@ -54,7 +54,7 @@ The compiled binary is present in `target/release/did_i_break_it`.
 
 
 ## Compiling via Cargo
-Cargo is the Rust package manager, the `install` sub-command pulls from [crates.io](https://crates.io/crates/did_i_break_it) and then compiles the binary locally, placing the compiled binary at `$HOME/.cargo/bin/did_i_break_it`.
+Cargo is the Rust package manager, the `install` sub-command pulls from [crates.io](https://crates.io/crates/did_i_break_it) and then compiles the binary locally, placing the compiled binary at `${HOME}/.cargo/bin/did_i_break_it`.
 
 ```
 cargo install did_i_break_it
