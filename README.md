@@ -67,7 +67,7 @@ For certain environments such as CICD etc you may want to pin the version.
 e.g.
 
 ```
-cargo install did_i_break_it --version 2.0.0
+cargo install did_i_break_it --version 0.6.0
 ```
 
 Rather than pinning to a specific version you can specify the major or minor version.
@@ -75,10 +75,10 @@ Rather than pinning to a specific version you can specify the major or minor ver
 e.g.
 
 ```
-cargo install did_i_break_it --version ^2
+cargo install did_i_break_it --version ^0
 ```
 
-Will download the latest `2.*` release whether that is `2.0.7` or `2.6.0`.
+Will download the latest `0.*` release whether that is `0.6.0` or `0.9.2`.
 
 
 ## Unit Testing
