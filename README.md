@@ -10,7 +10,7 @@ A tooling for checking your [https://crates.io](https://crates.io) library's rev
 __NOTE - Only Unix like environments are supported.__
 
 
-## Todo
+## Upcoming
  * Enable API/download retrying if request fails.
  * Lean mode, which cleans up between each reverse dependency.
 
