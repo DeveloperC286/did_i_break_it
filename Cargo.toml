@@ -8,7 +8,7 @@ description = "A tooling for checking your https://crates.io library's reverse d
 repository = "https://gitlab.com/DeveloperC/did_i_break_it"
 readme = "README.md"
 keywords = ["library", "breaking", "semantic", "versioning", "change"]
-categories = ["command-line-utilities", "development-tools"]
+categories = ["command-line-utilities", "development-tools", "config", "simulation", "api-bindings"]
 
 
 [dependencies]
