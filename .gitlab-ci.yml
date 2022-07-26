@@ -91,7 +91,7 @@ compiling:
     - cargo build --verbose --workspace --no-default-features
   rules:
     - if: $CI_MERGE_REQUEST_ID
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 
 unit-testing:
@@ -103,7 +103,7 @@ unit-testing:
     - cargo test --verbose --workspace --no-default-features
   rules:
     - if: $CI_MERGE_REQUEST_ID
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 
 releasing:
@@ -133,7 +133,7 @@ releasing:
       --ref "${CI_COMMIT_SHA}"
       --assets-link '{"name":"x86_64-linux-musl-binary.zip","url":"https://gitlab.com/DeveloperC/'${BIN_NAME}'/-/jobs/artifacts/'${new_tag}'/download?job=release-binary-compiling-x86_64-linux-musl"}'
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 
 crates-io-publishing:
