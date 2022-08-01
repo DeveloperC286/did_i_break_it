@@ -1,6 +1,6 @@
 # Did I Break It
 [![crates.io](https://img.shields.io/crates/v/did_i_break_it)](https://crates.io/crates/did_i_break_it)
-[![Pipeline Status](https://gitlab.com/DeveloperC/did_i_break_it/badges/main/pipeline.svg)](https://gitlab.com/DeveloperC/did_i_break_it/commits/main)
+[![Pipeline Status](https://gitlab.com/DeveloperC/did_i_break_it/badges/main/pipeline.svg)](https://gitlab.com/DeveloperC/did_i_break_it/-/pipelines)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
