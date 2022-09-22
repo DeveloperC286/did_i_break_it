@@ -77,24 +77,21 @@ impl ReverseDependencies {
 
         let before_filtering_reverse_dependencies_len = reverse_dependencies.len();
 
-        reverse_dependencies = reverse_dependencies
-            .into_iter()
-            .filter(|reverse_dependency| {
-                let version_required =
-                    VersionReq::parse(reverse_dependency.get_version_required()).unwrap();
-                let matches_local_crate_version = version_required.matches(&local_crate_version);
+        reverse_dependencies.retain(|reverse_dependency| {
+            let version_required =
+                VersionReq::parse(reverse_dependency.get_version_required()).unwrap();
+            let matches_local_crate_version = version_required.matches(&local_crate_version);
 
-                if !matches_local_crate_version {
-                    debug!(
-                        "Filtering out {:?} because it requires the version {:?}.",
-                        reverse_dependency.get_crate_name(),
-                        reverse_dependency.get_version_required()
-                    );
-                }
+            if !matches_local_crate_version {
+                debug!(
+                    "Filtering out {:?} because it requires the version {:?}.",
+                    reverse_dependency.get_crate_name(),
+                    reverse_dependency.get_version_required()
+                );
+            }
 
-                matches_local_crate_version
-            })
-            .collect();
+            matches_local_crate_version
+        });
 
         let after_filtering_reverse_dependencies_len = reverse_dependencies.len();
 
