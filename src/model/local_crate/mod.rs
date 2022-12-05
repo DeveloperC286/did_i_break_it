@@ -25,7 +25,7 @@ impl LocalCrate {
                                     Some(package) => Ok(LocalCrate {
                                         canonicalized_path: canonicalized_path.to_string(),
                                         name: package.name,
-                                        version: package.version,
+                                        version: package.version.unwrap(),
                                     }),
                                     None => {
                                         error!("No package inside the Cargo.toml manifest.");
