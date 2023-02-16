@@ -54,7 +54,7 @@ pub fn download_url_to_path(url: &str, path: &Path) -> Result<(), ()> {
                         "Response from {:?} was OK, attempting write to the path.",
                         url
                     );
-                    match File::create(&path) {
+                    match File::create(path) {
                         Ok(mut file) => match file.write_all(&bytes) {
                             Ok(_) => Ok(()),
                             Err(error) => {
