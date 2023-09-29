@@ -16,37 +16,37 @@ categories = ["command-line-utilities", "development-tools", "config", "simulati
 structopt = "0.3.26"
 
 # For logging.
-log = "0.4.17"
+log = "0.4.20"
 pretty_env_logger = "0.4.0"
 
 # For reading Cargo.toml files.
-cargo_toml = "0.15.1"
+cargo_toml = "0.15.3"
 
 # For Semantic Versioning parsing.
-semver = "1.0.16"
+semver = "1.0.19"
 
 # For defining a static HTTP client.
 lazy_static = "1.4.0"
 
 # For making HTTP requests to the crates.io API.
-reqwest = { version = "0.11.14", features = ["blocking"] }
-http = "0.2.8"
-url = "2.3.1"
+reqwest = { version = "0.11.20", features = ["blocking"] }
+http = "0.2.9"
+url = "2.4.1"
 
 # For parsing crates.io's API responses.
-serde = "1.0.152"
-serde_json = "1.0.93"
+serde = "1.0.188"
+serde_json = "1.0.107"
 
 # For fancy console output.
-console = "0.15.5"
+console = "0.15.7"
 
 # For multiple threads.
-rayon = "1.6.1"
+rayon = "1.8.0"
 
 
 [dev-dependencies]
 # For snapshot testing.
-insta = "1.28.0"
+insta = "1.33.0"
 
 
 [profile.release]
