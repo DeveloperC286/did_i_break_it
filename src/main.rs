@@ -12,8 +12,8 @@ use std::process::Command;
 use std::str::from_utf8;
 use std::sync::{Arc, Mutex};
 
+use clap::Parser;
 use rayon::prelude::*;
-use structopt::StructOpt;
 
 use crate::model::local_crate::LocalCrate;
 use crate::model::reverse_dependencies::ReverseDependencies;
@@ -28,7 +28,7 @@ const ERROR_EXIT_CODE: i32 = 1;
 fn main() {
     pretty_env_logger::init();
     trace!("Version {}.", env!("CARGO_PKG_VERSION"));
-    let arguments = cli::Arguments::from_args();
+    let arguments = cli::Arguments::parse();
     trace!("The command line arguments provided are {:?}.", arguments);
 
     if cfg!(windows) {
