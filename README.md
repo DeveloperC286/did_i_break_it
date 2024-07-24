@@ -99,4 +99,4 @@ cargo test
 
 
 ## Issues/Feature Requests
-To report an issue or request a new feature use [https://gitlab.com/DeveloperC/did_i_break_it/-/issues](https://gitlab.com/DeveloperC/did_i_break_it/-/issues).
+To report an issue or request a new feature use [https://github.com/DeveloperC286/did_i_break_it/issues](https://github.com/DeveloperC286/did_i_break_it/issues).
