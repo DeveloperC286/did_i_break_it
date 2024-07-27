@@ -32,12 +32,98 @@ check-conventional-commits-linting:
     RUN ./ci/check-conventional-commits-linting.sh --from-reference "${from_reference}"
 
 
+COPY_SOURCECODE:
+    COMMAND
+    DO +COPY_CI_DATA
+    COPY --dir "Cargo.lock" "Cargo.toml" "src/" "./"
+
+
+rust-formatting-base:
+    FROM +rust-base
+    RUN rustup component add rustfmt
+    DO +COPY_SOURCECODE
+
+
+check-rust-formatting:
+    FROM +rust-formatting-base
+    RUN ./ci/check-rust-formatting.sh
+
+
 golang-base:
     FROM golang:1.22.1
-    ENV GOPROXY=direct
-    ENV CGO_ENABLED=0
-    ENV GOOS=linux
-    ENV GOARCH=amd64
+
+
+shell-formatting-base:
+    FROM +golang-base
+    RUN go install mvdan.cc/sh/v3/cmd/shfmt@v3.7.0
+    DO +COPY_CI_DATA
+
+
+check-shell-formatting:
+    FROM +shell-formatting-base
+    RUN ./ci/check-shell-formatting.sh
+
+
+yaml-formatting-base:
+    FROM +golang-base
+    RUN go install github.com/google/yamlfmt/cmd/yamlfmt@v0.10.0
+    COPY ".yamlfmt" "./"
+    DO +COPY_CI_DATA
+
+
+check-yaml-formatting:
+    FROM +yaml-formatting-base
+    RUN ./ci/check-yaml-formatting.sh
+
+
+check-formatting:
+    BUILD +check-rust-formatting
+    BUILD +check-shell-formatting
+    BUILD +check-yaml-formatting
+
+
+fix-rust-formatting:
+    FROM +rust-formatting-base
+    RUN ./ci/fix-rust-formatting.sh
+    SAVE ARTIFACT "src/" AS LOCAL "./"
+
+
+fix-shell-formatting:
+    FROM +shell-formatting-base
+    RUN ./ci/fix-shell-formatting.sh
+    SAVE ARTIFACT "ci/" AS LOCAL "./"
+
+
+fix-yaml-formatting:
+    FROM +yaml-formatting-base
+    RUN ./ci/fix-yaml-formatting.sh
+    SAVE ARTIFACT ".github/" AS LOCAL "./"
+
+
+fix-formatting:
+    BUILD +fix-rust-formatting
+    BUILD +fix-shell-formatting
+    BUILD +fix-yaml-formatting
+
+
+check-rust-linting:
+    FROM +rust-base
+	RUN rustup component add clippy
+    DO +COPY_SOURCECODE
+    RUN ./ci/check-rust-linting.sh
+
+
+ubuntu-base:
+    FROM ubuntu:22.04
+    # https://askubuntu.com/questions/462690/what-does-apt-get-fix-missing-do-and-when-is-it-useful
+    RUN apt-get update --fix-missing
+
+
+check-shell-linting:
+    FROM +ubuntu-base
+    RUN apt-get install shellcheck -y
+    DO +COPY_CI_DATA
+    RUN ./ci/check-shell-linting.sh
 
 
 check-github-actions-workflows-linting:
@@ -48,4 +134,20 @@ check-github-actions-workflows-linting:
 
 
 check-linting:
+    BUILD +check-rust-linting
+    BUILD +check-shell-linting
     BUILD +check-github-actions-workflows-linting
+
+
+compile:
+    FROM +rust-base
+    DO +COPY_SOURCECODE
+    RUN ./ci/compile.sh
+    SAVE ARTIFACT "target/" AS LOCAL "./"
+    SAVE ARTIFACT "Cargo.lock" AS LOCAL "./"
+
+
+unit-test:
+    FROM +rust-base
+    DO +COPY_SOURCECODE
+    RUN ./ci/unit-test.sh
