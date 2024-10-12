@@ -13,7 +13,8 @@ COPY_METADATA:
 
 
 rust-base:
-    FROM rust:1.70.0
+    FROM rust:1.70.0-alpine3.18
+    RUN apk add --no-cache musl-dev openssl-dev bash
 
 
 check-clean-git-history:
@@ -151,3 +152,15 @@ unit-test:
     FROM +rust-base
     DO +COPY_SOURCECODE
     RUN ./ci/unit-test.sh
+
+
+release-artifacts:
+    FROM +rust-base
+    DO +COPY_CI_DATA
+    # Needed by the GitHub CLI.
+    RUN apk add --no-cache git
+    RUN ./ci/install-github-cli.sh
+    DO +COPY_METADATA
+    DO +COPY_SOURCECODE
+    ARG release
+    RUN --secret GH_TOKEN ./ci/release-artifacts.sh --release "${release}"
