@@ -12,14 +12,28 @@ COPY_METADATA:
     COPY --dir ".git/" "./"
 
 
+alpine-base:
+    FROM alpine:3.20.3@sha256:1e42bbe2508154c9126d48c2b8a75420c3544343bf86fd041fb7527e017a4b4a
+    # renovate: datasource=repology depName=alpine_3_20/bash versioning=loose
+    ENV BASH_VERSION="5.2.26-r0"
+    RUN apk add --no-cache bash=$BASH_VERSION
+    WORKDIR "/did_i_break_it"
+
+
 rust-base:
-    FROM rust:1.70.0-alpine3.18
-    RUN apk add --no-cache musl-dev openssl-dev bash
+    FROM +alpine-base
+    # renovate: datasource=repology depName=alpine_3_20/rust versioning=loose
+    ENV RUST_VERSION="1.78.0-r0"
+    # renovate: datasource=repology depName=alpine_3_20/openssl-dev versioning=loose
+    ENV OPENSSL_VERSION="3.3.2-r1"
+    RUN apk add --no-cache cargo=$RUST_VERSION openssl-dev=$OPENSSL_VERSION
 
 
 check-clean-git-history:
     FROM +rust-base
-    RUN cargo install clean_git_history --version 0.1.2 --locked
+    # renovate: datasource=github-releases depName=DeveloperC286/clean_git_history
+    ENV CLEAN_GIT_HISTORY_VERSION="v0.2.0"
+    RUN wget -O - "https://github.com/DeveloperC286/clean_git_history/releases/download/${CLEAN_GIT_HISTORY_VERSION}/x86_64-unknown-linux-musl.gz" | gzip -d > /usr/bin/clean_git_history && chmod 755 /usr/bin/clean_git_history
     DO +COPY_METADATA
     ARG from_reference="origin/HEAD"
     RUN ./ci/check-clean-git-history.sh --from-reference "${from_reference}"
@@ -27,7 +41,9 @@ check-clean-git-history:
 
 check-conventional-commits-linting:
     FROM +rust-base
-    RUN cargo install conventional_commits_linter --version 0.12.3 --locked
+    # renovate: datasource=github-releases depName=DeveloperC286/conventional_commits_linter
+    ENV CONVENTIONAL_COMMITS_LINTER_VERSION="v0.13.0"
+    RUN wget -O - "https://github.com/DeveloperC286/conventional_commits_linter/releases/download/${CONVENTIONAL_COMMITS_LINTER_VERSION}/x86_64-unknown-linux-musl.gz" | gzip -d > /usr/bin/conventional_commits_linter && chmod 755 /usr/bin/conventional_commits_linter
     DO +COPY_METADATA
     ARG from_reference="origin/HEAD"
     RUN ./ci/check-conventional-commits-linting.sh --from-reference "${from_reference}"
@@ -36,12 +52,13 @@ check-conventional-commits-linting:
 COPY_SOURCECODE:
     COMMAND
     DO +COPY_CI_DATA
-    COPY --dir "Cargo.lock" "Cargo.toml" "src/" "./"
+    COPY --if-exists "Cargo.lock" "./"
+    COPY --dir "Cargo.toml" "src/" "./"
 
 
 rust-formatting-base:
     FROM +rust-base
-    RUN rustup component add rustfmt
+    RUN apk add --no-cache rustfmt=$RUST_VERSION
     DO +COPY_SOURCECODE
 
 
@@ -52,11 +69,14 @@ check-rust-formatting:
 
 golang-base:
     FROM golang:1.22.1
+    WORKDIR "/did_i_break_it"
 
 
 shell-formatting-base:
     FROM +golang-base
-    RUN go install mvdan.cc/sh/v3/cmd/shfmt@v3.7.0
+    # renovate: datasource=github-releases depName=mvdan/sh
+    ENV SHFMT_VERSION="v3.7.0"
+    RUN go install mvdan.cc/sh/v3/cmd/shfmt@$SHFMT_VERSION
     DO +COPY_CI_DATA
 
 
@@ -67,7 +87,9 @@ check-shell-formatting:
 
 yaml-formatting-base:
     FROM +golang-base
-    RUN go install github.com/google/yamlfmt/cmd/yamlfmt@v0.10.0
+    # renovate: datasource=github-releases depName=google/yamlfmt
+    ENV YAMLFMT_VERSION="v0.10.0"
+    RUN go install github.com/google/yamlfmt/cmd/yamlfmt@$YAMLFMT_VERSION
     COPY ".yamlfmt" "./"
     DO +COPY_CI_DATA
 
@@ -109,27 +131,25 @@ fix-formatting:
 
 check-rust-linting:
     FROM +rust-base
-	RUN rustup component add clippy
+    RUN apk add --no-cache rust-clippy=$RUST_VERSION
     DO +COPY_SOURCECODE
     RUN ./ci/check-rust-linting.sh
 
 
-ubuntu-base:
-    FROM ubuntu:22.04
-    # https://askubuntu.com/questions/462690/what-does-apt-get-fix-missing-do-and-when-is-it-useful
-    RUN apt-get update --fix-missing
-
-
 check-shell-linting:
-    FROM +ubuntu-base
-    RUN apt-get install shellcheck -y
+    FROM +alpine-base
+    # renovate: datasource=repology depName=alpine_3_20/shellcheck versioning=loose
+    ENV SHELLCHECK_VERSION="0.10.0-r1"
+    RUN apk add --no-cache shellcheck=$SHELLCHECK_VERSION
     DO +COPY_CI_DATA
     RUN ./ci/check-shell-linting.sh
 
 
 check-github-actions-workflows-linting:
     FROM +golang-base
-    RUN go install github.com/rhysd/actionlint/cmd/actionlint@v1.6.26
+    # renovate: datasource=github-releases depName=rhysd/actionlint
+    ENV ACTIONLINT_VERSION="v1.6.26"
+    RUN go install github.com/rhysd/actionlint/cmd/actionlint@$ACTIONLINT_VERSION
     DO +COPY_CI_DATA
     RUN ./ci/check-github-actions-workflows-linting.sh
 
@@ -155,11 +175,10 @@ unit-test:
 
 
 release-artifacts:
-    FROM +rust-base
-    DO +COPY_CI_DATA
-    # Needed by the GitHub CLI.
-    RUN apk add --no-cache git
-    RUN ./ci/install-github-cli.sh
+    FROM +alpine-base
+    # renovate: datasource=repology depName=alpine_3_20/github-cli versioning=loose
+    ENV GITHUB_CLI_VERSION="2.47.0-r4"
+    RUN apk add --no-cache github-cli=$GITHUB_CLI_VERSION
     DO +COPY_METADATA
     DO +COPY_SOURCECODE
     ARG release
@@ -168,5 +187,6 @@ release-artifacts:
 
 publish:
     FROM +rust-base
+    COPY "README.md" "./"
     DO +COPY_SOURCECODE
     RUN --secret CARGO_REGISTRY_TOKEN ./ci/publish.sh
