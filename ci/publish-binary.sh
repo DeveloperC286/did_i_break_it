@@ -59,6 +59,6 @@ set -o xtrace
 
 target=$(rustc -vV | sed -n 's|host: ||p')
 cargo build --verbose --release
-gzip --verbose --stdout "target/release/did_i_break_it" >"${target}.gz"
-gh release upload "${_arg_release}" "${target}.gz"
+tar -czvf "${target}.tar.gz" -C target/release did_i_break_it
+gh release upload "${_arg_release}" "${target}.tar.gz"
 # ] <-- needed because of Argbash
