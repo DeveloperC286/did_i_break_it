@@ -64,7 +64,7 @@ check-rust-formatting:
 
 
 golang-base:
-    FROM golang:1.23.6@sha256:ec4ddbcdbb283410acc2073e68737daa39cbd99b7306d12e3335927c915f6c29
+    FROM golang:1.23.6@sha256:958bd2e45b2d6d166aa0e33ee737093fe0c773c89c3fc142f26ac65ec37507cd
     WORKDIR "/did_i_break_it"
 
 
