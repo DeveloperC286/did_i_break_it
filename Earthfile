@@ -20,7 +20,7 @@ rust-base:
     # renovate: datasource=repology depName=alpine_3_20/musl-dev versioning=loose
     ENV MUSL_VERSION="1.2.5-r0"
     # renovate: datasource=repology depName=alpine_3_20/openssl-dev versioning=loose
-    ENV OPENSSL_VERSION="3.3.2-r1"
+    ENV OPENSSL_VERSION="3.3.2-r2"
     RUN apk add --no-cache bash=$BASH_VERSION musl-dev=$MUSL_VERSION openssl-dev=$OPENSSL_VERSION openssl-libs-static=$OPENSSL_VERSION
     RUN rustup component add rustfmt clippy
     WORKDIR "/did_i_break_it"
