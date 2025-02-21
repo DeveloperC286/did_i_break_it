@@ -1,0 +1,83 @@
+# Changelog
+
+## 0.6.1 (2025-02-21)
+
+## What's Changed
+* ci: removing GitLab CI/CD configuration by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/3
+* docs: updating issues URL by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/9
+* ci: adding GitLab mirroring GitHub Action by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/10
+* ci: adding GitHub Actions Workflows linting by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/8
+* ci: adding Clean Git History check workflow by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/23
+* ci: adding Conventional Commits linting workflow by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/24
+* ci: adding Continuous integration (CI) workflow by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/25
+* build: removing .goreleaser.yaml reference by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/26
+* ci: moving GitHub Actions workflow formatting check by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/27
+* docs: updating repository link to GitHub by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/28
+* docs: changing URLs to GitHub by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/29
+* chore: Configure Renovate by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/30
+* chore(deps): update actions/checkout action to v4 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/34
+* ci: converting to earthly/actions-setup@v1 by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/43
+* docs: removing Continuous Integration (CI) badge by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/44
+* ci: adding release-please by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/45
+* ci: adding release binary publishing by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/47
+* ci: adding publishing to crates.io by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/48
+* fix(deps): update rust crate log to v0.4.22 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/35
+* fix(deps): update rust crate http to v0.2.12 - autoclosed by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/32
+* fix(deps): update rust crate console to v0.15.8 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/31
+* ci: Alpine migration for pinning/updating all dependencies by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/52
+* ci: adding Renovate GitHub Workflow Earthly updating by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/53
+* chore(deps): update earthly/earthly docker tag to v0.8.15 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/54
+* ci: replacing missed Earthly download with action by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/56
+* build: converting to Rust's Alpine image by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/57
+* chore(deps): update dependency developerc286/conventional_commits_linter to v0.14.3 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/55
+* build: improved continuous delivery target naming by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/58
+* build: adding cargo --locked and removing --workspace by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/59
+* ci: removing Alpine Renovate version updating by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/60
+* ci: converting to publishing .tar.gz by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/61
+* ci: pinning actions/checkout at v4.2.2 by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/62
+* ci: pinning earthly/actions-setup at v1.0.13 by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/63
+* ci: pinning googleapis/release-please-action at v4.1.3 by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/64
+* ci: using Earthly GitHub releases by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/65
+* ci: Renovate automerge PRs by @DeveloperC286 in https://github.com/DeveloperC286/did_i_break_it/pull/66
+* fix(deps): update rust crate semver to v1.0.25 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/36
+* chore(deps): pin dependencies by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/67
+* fix(deps): update rust crate console to v0.15.10 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/68
+* fix(deps): update rust crate serde to v1.0.217 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/37
+* fix(deps): update rust crate serde_json to v1.0.138 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/38
+* fix(deps): update rust crate log to v0.4.25 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/69
+* chore(deps): update dependency google/yamlfmt to v0.15.0 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/70
+* chore(deps): update rust crate insta to v1.42.1 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/39
+* fix(deps): update rust crate cargo_toml to 0.21.0 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/40
+* fix(deps): update rust crate clap to v4.5.27 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/41
+* fix(deps): update rust crate lazy_static to v1.5.0 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/42
+* fix(deps): update rust crate pretty_env_logger to 0.5.0 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/49
+* fix(deps): update rust crate rayon to v1.10.0 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/50
+* chore(deps): update dependency mvdan/sh to v3.10.0 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/71
+* chore(deps): update dependency rhysd/actionlint to v1.7.7 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/72
+* chore(deps): update golang docker tag to v1.23.5 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/73
+* fix(deps): update rust crate url to v2.5.4 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/75
+* fix(deps): update rust crate clap to v4.5.28 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/77
+* chore(deps): update golang:1.23.5 docker digest to e213430 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/78
+* chore(deps): update ubuntu:24.04 docker digest to 7229784 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/79
+* chore(deps): update golang docker tag to v1.23.6 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/80
+* chore(deps): update golang:1.23.6 docker digest to 958bd2e by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/81
+* chore(deps): update golang:1.23.6 docker digest to 9271129 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/82
+* chore(deps): update dependency alpine_3_20/openssl-dev to v3.3.2-r2 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/83
+* chore(deps): pin rust crate insta to v1.33.0 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/84
+* chore(deps): update rust crate insta to v1.42.1 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/85
+* chore(deps): update dependency google/yamlfmt to v0.16.0 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/86
+* chore(deps): update dependency alpine_3_20/openssl-dev to v3.3.3-r0 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/88
+* fix(deps): update rust crate clap to v4.5.29 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/87
+* chore(deps): update golang docker tag to v1.24.0 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/89
+* chore(deps): update golang:1.24.0 docker digest to 2b1cbf2 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/90
+* chore(deps): update dependency alpine_3_20/musl-dev to v1.2.5-r1 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/91
+* fix(deps): update rust crate clap to v4.5.30 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/92
+* fix(deps): update rust crate serde to v1.0.218 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/93
+* fix(deps): update rust crate serde_json to v1.0.139 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/94
+* fix(deps): update rust crate log to v0.4.26 by @renovate in https://github.com/DeveloperC286/did_i_break_it/pull/95
+
+## New Contributors
+* @DeveloperC286 made their first contribution in https://github.com/DeveloperC286/did_i_break_it/pull/3
+* @renovate made their first contribution in https://github.com/DeveloperC286/did_i_break_it/pull/30
+
+**Full Changelog**: https://github.com/DeveloperC286/did_i_break_it/compare/0.6.0...v0.6.1
