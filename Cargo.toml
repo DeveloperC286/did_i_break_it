@@ -46,7 +46,7 @@ rayon = "1.8.0"
 
 [dev-dependencies]
 # For snapshot testing.
-insta = "=1.42.1"
+insta = "=1.42.2"
 
 
 [profile.release]
