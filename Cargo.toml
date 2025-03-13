@@ -20,7 +20,7 @@ log = "0.4.20"
 pretty_env_logger = "0.5.0"
 
 # For reading Cargo.toml files.
-cargo_toml = "0.21.0"
+cargo_toml = "0.22.0"
 
 # For Semantic Versioning parsing.
 semver = "1.0.19"
