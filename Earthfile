@@ -167,7 +167,7 @@ unit-test:
 
 
 static-binary-test:
-    FROM ubuntu:24.04@sha256:45243615f4992816784f678ce6c31b34bd07ba09279f740d8d014a9b855c531d
+    FROM ubuntu:24.04@sha256:1e622c5f073b4f6bfad6632f2616c7f59ef256e96fe78bf6a595d1dc4376ac02
     COPY "+compile/target/" "target/"
     RUN ./target/debug/did_i_break_it --help
 
