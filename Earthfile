@@ -14,14 +14,11 @@ COPY_METADATA:
 
 rust-base:
     FROM rust:1.78.0-alpine3.20@sha256:214477ec837f9bedd80be4b087fec09e3f270831979412840f3f6c38e5a0d9c1
-    # renovate: datasource=repology depName=alpine_3_20/bash versioning=loose
-    ENV BASH_VERSION="5.2.26-r0"
-    RUN apk add --no-cache bash=$BASH_VERSION
-    # renovate: datasource=repology depName=alpine_3_20/musl-dev versioning=loose
-    ENV MUSL_VERSION="1.2.5-r1"
-    # renovate: datasource=repology depName=alpine_3_20/openssl-dev versioning=loose
-    ENV OPENSSL_VERSION="3.3.3-r0"
-    RUN apk add --no-cache bash=$BASH_VERSION musl-dev=$MUSL_VERSION openssl-dev=$OPENSSL_VERSION openssl-libs-static=$OPENSSL_VERSION
+    RUN apk add --no-cache \
+        bash=5.2.26-r0 \
+        musl-dev=1.2.5-r1 \
+        openssl-dev=3.3.3-r0 \
+        openssl-libs-static=3.3.3-r0
     RUN rustup component add rustfmt clippy
     WORKDIR "/did_i_break_it"
 
@@ -132,9 +129,8 @@ check-rust-linting:
 
 check-shell-linting:
     FROM +rust-base
-    # renovate: datasource=repology depName=alpine_3_20/shellcheck versioning=loose
-    ENV SHELLCHECK_VERSION="0.10.0-r1"
-    RUN apk add --no-cache shellcheck=$SHELLCHECK_VERSION
+    RUN apk add --no-cache \
+        shellcheck=0.10.0-r1
     DO +COPY_CI_DATA
     RUN ./ci/check-shell-linting.sh
 
@@ -174,9 +170,8 @@ static-binary-test:
 
 publish-binary:
     FROM +rust-base
-    # renovate: datasource=repology depName=alpine_3_20/github-cli versioning=loose
-    ENV GITHUB_CLI_VERSION="2.47.0-r4"
-    RUN apk add --no-cache github-cli=$GITHUB_CLI_VERSION
+    RUN apk add --no-cache \
+         github-cli=2.47.0-r4
     DO +COPY_METADATA
     DO +COPY_SOURCECODE
     ARG release
