@@ -13,7 +13,7 @@ COPY_METADATA:
 
 
 rust-base:
-    FROM rust:1.78.0-alpine3.20@sha256:214477ec837f9bedd80be4b087fec09e3f270831979412840f3f6c38e5a0d9c1
+    FROM rust:1.86.0-alpine3.20@sha256:2ee35275aeaa2e438f34a0563f7931988f5c5254e2eeec562f95a60ca2a2e7c3
     RUN apk add --no-cache \
         bash=5.2.26-r0 \
         musl-dev=1.2.5-r1 \
