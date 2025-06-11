@@ -222,7 +222,7 @@ fn main() {
                                                                         let mut cached_crate_stderr =
                                                                             cache_directory.clone();
                                                                         cached_crate_stderr.push(
-                                                                            &format!(
+                                                                            format!(
                                                                                 "{}.stderr",
                                                                                 reverse_dependency
                                                                                     .get_crate_name()
