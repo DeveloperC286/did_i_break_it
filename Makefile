@@ -35,8 +35,8 @@ fix-rust-formatting:
 	docker run --rm -v $(PWD):/workspace -u $(UID):$(GID) fix-rust-formatting
 
 fix-shell-formatting:
-	docker pull mvdan/shfmt:v3.11.0-alpine
-	docker run --rm -v $(PWD):/workspace -w /workspace -u $(UID):$(GID) mvdan/shfmt:v3.11.0-alpine --simplify --write ci/* 
+	docker pull mvdan/shfmt:$(SHFMT_VERSION)
+	docker run --rm -v $(PWD):/workspace -w /workspace -u $(UID):$(GID) mvdan/shfmt:$(SHFMT_VERSION) --simplify --write ci/*
 
 fix-yaml-formatting:
 	docker pull ghcr.io/google/yamlfmt:$(YAMLFMT_VERSION)
