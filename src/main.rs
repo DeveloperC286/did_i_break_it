@@ -29,7 +29,7 @@ fn main() {
     pretty_env_logger::init();
     trace!("Version {}.", env!("CARGO_PKG_VERSION"));
     let arguments = cli::Arguments::parse();
-    trace!("The command line arguments provided are {:?}.", arguments);
+    trace!("The command line arguments provided are {arguments:?}.");
 
     if cfg!(windows) {
         error!("Only Unix like environments are supported.");
@@ -38,10 +38,7 @@ fn main() {
 
     match LocalCrate::from_path(&arguments.local_crate) {
         Ok(local_crate) => {
-            trace!(
-                "Successfully parsed the local Crate's information as {:?}.",
-                local_crate
-            );
+            trace!("Successfully parsed the local Crate's information as {local_crate:?}.",);
             match ReverseDependencies::from_url(
                 &local_crate.get_reverse_dependencies_url(&arguments.api_base_url),
                 local_crate.get_version(),
@@ -52,11 +49,11 @@ fn main() {
                     if !cache.exists() {
                         match create_dir_all(&cache) {
                             Ok(()) => {
-                                trace!("Successfully created the directory {:?}.", cache);
+                                trace!("Successfully created the directory {cache:?}.");
                             }
                             Err(error) => {
-                                error!("{:?}", error);
-                                error!("Unable to create the directory {:?}.", cache);
+                                error!("{error:?}");
+                                error!("Unable to create the directory {cache:?}.");
                                 exit(ERROR_EXIT_CODE);
                             }
                         }
@@ -70,11 +67,10 @@ fn main() {
                         cached_crate.push(format!("{}.crate", reverse_dependency.get_crate_name()));
 
                         if cached_crate.exists() {
-                            trace!("Using the already cached version of {:?}.", cached_crate);
+                            trace!("Using the already cached version of {cached_crate:?}.");
                         } else {
                             trace!(
-                                "{:?} does not exist, attempting to download crate from CDN.",
-                                cached_crate
+                                "{cached_crate:?} does not exist, attempting to download crate from CDN."
                             );
                             let cdn_download_url =
                                 reverse_dependency.get_cdn_download_url(&arguments.cdn_base_url);
@@ -84,15 +80,12 @@ fn main() {
                             ) {
                                 Ok(_) => {
                                     trace!(
-                                        "Successfully downloaded and cached the crate at {:?}.",
-                                        cached_crate
+                                        "Successfully downloaded and cached the crate at {cached_crate:?}."
                                     );
                                 }
                                 Err(_) => {
                                     trace!(
-                                        "Unable to download {:?} to {:?}",
-                                        cdn_download_url,
-                                        cached_crate
+                                        "Unable to download {cdn_download_url:?} to {cached_crate:?}"
                                     );
                                     exit(ERROR_EXIT_CODE);
                                 }
@@ -104,21 +97,18 @@ fn main() {
 
                         if cached_crate_directory.exists() {
                             trace!(
-                                "{:?} exist, attempting to delete it.",
-                                cached_crate_directory
+                                "{cached_crate_directory:?} exist, attempting to delete it."
                             );
                             match remove_dir_all(&cached_crate_directory) {
                                 Ok(_) => {
                                     trace!(
-                                        "Successfully deleted the directory {:?}.",
-                                        cached_crate_directory
+                                        "Successfully deleted the directory {cached_crate_directory:?}."
                                     );
                                 }
                                 Err(error) => {
-                                    error!("{:?}", error);
+                                    error!("{error:?}");
                                     error!(
-                                        "Unable to delete the directory {:?}.",
-                                        cached_crate_directory
+                                        "Unable to delete the directory {cached_crate_directory:?}."
                                     );
                                     exit(ERROR_EXIT_CODE);
                                 }
@@ -134,15 +124,13 @@ fn main() {
                             .arg("--directory")
                             .arg(&cache_directory);
                         trace!(
-                            "Attempting to unpack the crate using the command {:?}.",
-                            unpacking
+                            "Attempting to unpack the crate using the command {unpacking:?}."
                         );
                         match unpacking.output() {
                             Ok(output) => {
                                 if output.status.success() {
                                     trace!(
-                                        "Successfully unpacked into the directory {:?}.",
-                                        cached_crate_directory
+                                        "Successfully unpacked into the directory {cached_crate_directory:?}."
                                     );
                                 } else {
                                     error!("{}", from_utf8(&output.stderr).unwrap());
@@ -151,7 +139,7 @@ fn main() {
                                 }
                             }
                             Err(error) => {
-                                error!("{:?}", error);
+                                error!("{error:?}");
                                 error!("Unable to execute the crate unpacking command.");
                                 exit(ERROR_EXIT_CODE);
                             }
@@ -162,15 +150,13 @@ fn main() {
                             .arg("build")
                             .current_dir(&cached_crate_directory);
                         info!(
-                            "Attempting to compile {:?} with the command {:?}.",
-                            cached_crate_directory, cargo_build
+                            "Attempting to compile {cached_crate_directory:?} with the command {cargo_build:?}."
                         );
                         match cargo_build.output() {
                             Ok(output) => {
                                 if output.status.success() {
                                     info!(
-                                        "Successfully built the crate {:?}.",
-                                        cached_crate_directory
+                                        "Successfully built the crate {cached_crate_directory:?}."
                                     );
                                     let mut cached_crate_override = cached_crate_directory.clone();
                                     cached_crate_override.push(".cargo");
@@ -178,8 +164,7 @@ fn main() {
                                     match create_dir_all(&cached_crate_override) {
                                         Ok(()) => {
                                             trace!(
-                                                "Successfully created the directory {:?}.",
-                                                cached_crate_override
+                                                "Successfully created the directory {cached_crate_override:?}."
                                             );
 
                                             cached_crate_override.push("config.toml");
@@ -187,8 +172,7 @@ fn main() {
                                             match File::create(&cached_crate_override) {
                                                 Ok(mut override_file) => {
                                                     trace!(
-                                                        "Successfully created the file {:?}.",
-                                                        cached_crate_override
+                                                        "Successfully created the file {cached_crate_override:?}."
                                                     );
 
                                                     match override_file.write_all(
@@ -204,17 +188,17 @@ fn main() {
                                                             cargo_build.arg("build").current_dir(
                                                                 &cached_crate_directory,
                                                             );
-                                                            info!("Attempting to compile {:?} while pointing to the local crate version with the command {:?}.",cached_crate_directory, cargo_build);
+                                                            info!("Attempting to compile {cached_crate_directory:?} while pointing to the local crate version with the command {cargo_build:?}.");
 
                                                             match cargo_build.output() {
                                                                 Ok(output) => {
                                                                     if output.status.success() {
-                                                                        info!("Successfully built the crate {:?} while pointing to the local crate version.", cached_crate_directory);
+                                                                        info!("Successfully built the crate {cached_crate_directory:?} while pointing to the local crate version.");
                                                                         statistics
                                                                             .lock().unwrap()
                                                                             .increment_successful();
                                                                     } else {
-                                                                        warn!("Failed to build the crate {:?} while pointing to the local crate version.", cached_crate_directory);
+                                                                        warn!("Failed to build the crate {cached_crate_directory:?} while pointing to the local crate version.");
                                                                         statistics
                                                                             .lock().unwrap()
                                                                             .increment_failed();
@@ -233,7 +217,7 @@ fn main() {
                                                                             &cached_crate_stderr,
                                                                         ) {
                                                                             Ok(mut stderr_file) => {
-                                                                                trace!("Successfully created the file {:?}.", cached_crate_stderr);
+                                                                                trace!("Successfully created the file {cached_crate_stderr:?}.");
 
                                                                                 match stderr_file
                                                                                     .write_all(
@@ -241,70 +225,65 @@ fn main() {
                                                                                             .stderr,
                                                                                     ) {
                                                                                     Ok(_) => {
-                                                                                        trace!("Written the stderr to {:?}.", cached_crate_stderr);
+                                                                                        trace!("Written the stderr to {cached_crate_stderr:?}.");
                                                                                     }
                                                                                     Err(error) => {
                                                                                         error!(
-                                                                                            "{:?}",
-                                                                                            error
+                                                                                            "{error:?}"
                                                                                         );
-                                                                                        trace!("Failed to write stderr to the file {:?}.", cached_crate_stderr);
+                                                                                        trace!("Failed to write stderr to the file {cached_crate_stderr:?}.");
                                                                                     }
                                                                                 }
                                                                             }
                                                                             Err(error) => {
                                                                                 error!(
-                                                                                    "{:?}",
-                                                                                    error
+                                                                                    "{error:?}"
                                                                                 );
-                                                                                trace!("Failed to create the file {:?}.", cached_crate_stderr);
+                                                                                trace!("Failed to create the file {cached_crate_stderr:?}.");
                                                                             }
                                                                         }
                                                                     }
                                                                 }
                                                                 Err(error) => {
-                                                                    error!("{:?}", error);
+                                                                    error!("{error:?}");
                                                                     error!("Unable to execute the crate building command.");
                                                                     exit(ERROR_EXIT_CODE);
                                                                 }
                                                             }
                                                         }
                                                         Err(error) => {
-                                                            error!("{:?}", error);
+                                                            error!("{error:?}");
                                                             error!(
-                                                                "Unable to write to the file {:?}.",
-                                                                override_file
+                                                                "Unable to write to the file {override_file:?}."
                                                             );
                                                             exit(ERROR_EXIT_CODE);
                                                         }
                                                     }
                                                 }
                                                 Err(error) => {
-                                                    error!("{:?}", error);
+                                                    error!("{error:?}");
                                                     error!(
-                                                        "Unable to create the file {:?}.",
-                                                        cached_crate_override
+                                                        "Unable to create the file {cached_crate_override:?}."
                                                     );
                                                     exit(ERROR_EXIT_CODE);
                                                 }
                                             }
                                         }
                                         Err(error) => {
-                                            error!("{:?}", error);
-                                            error!("Unable to create the directory {:?}.", cache);
+                                            error!("{error:?}");
+                                            error!("Unable to create the directory {cache:?}.");
                                             exit(ERROR_EXIT_CODE);
                                         }
                                     }
                                 } else {
                                     warn!(
-                                        "Skipping {:?}, as unable to compile it unmodified.",
-                                        cached_crate_directory
+                                        "Skipping {cached_crate_directory:?}, as unable to compile it unmodified."
                                     );
                                     statistics.lock().unwrap().increment_skipped();
                                 }
                             }
                             Err(error) => {
-                                error!("{:?}", error);
+                                error!("{error:?}");
                                 error!("Unable to execute the crate building command.");
                                 exit(ERROR_EXIT_CODE);
                             }

@@ -85,7 +85,7 @@ impl ReverseDependency {
                 }
             }
             Err(error) => {
-                error!("{:?}", error);
+                error!("{error:?}");
                 error!("Unable to parse content into JSON.");
                 Err(())
             }
