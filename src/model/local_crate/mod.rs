@@ -33,12 +33,12 @@ impl LocalCrate {
                                     }
                                 },
                                 Err(error) => {
-                                    error!("{:?}", error);
+                                    error!("{error:?}");
                                     Err(())
                                 }
                             }
                         } else {
-                            error!("{:?} does not exist.", path);
+                            error!("{path:?} does not exist.");
                             Err(())
                         }
                     }
@@ -48,13 +48,13 @@ impl LocalCrate {
                     }
                 },
                 Err(error) => {
-                    error!("{:?}", error);
+                    error!("{error:?}");
                     error!("Can not canonicalize the path.");
                     Err(())
                 }
             }
         } else {
-            error!("{:?} does not exist.", path);
+            error!("{path:?} does not exist.");
             Err(())
         }
     }

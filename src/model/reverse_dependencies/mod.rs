@@ -22,10 +22,7 @@ impl ReverseDependencies {
         let local_crate_version = match Version::parse(local_crate_version) {
             Ok(local_crate_version) => local_crate_version,
             Err(_) => {
-                error!(
-                    "Unable to compile {:?} into a Semantic Version.",
-                    local_crate_version
-                );
+                error!("Unable to compile {local_crate_version:?} into a Semantic Version.");
                 return Err(());
             }
         };
@@ -59,17 +56,14 @@ impl ReverseDependencies {
                             }
                         },
                         Err(_) => {
-                            error!("Unable to fetch the content from {:?}.", url);
+                            error!("Unable to fetch the content from {url:?}.");
                             return Err(());
                         }
                     }
                 }
                 Err(error) => {
-                    error!("{:?}", error);
-                    error!(
-                        "Unable to parse {:?} with query parameters into a URL.",
-                        base_url
-                    );
+                    error!("{error:?}");
+                    error!("Unable to parse {base_url:?} with query parameters into a URL.");
                     return Err(());
                 }
             }
@@ -100,10 +94,7 @@ impl ReverseDependencies {
             before_filtering_reverse_dependencies_len - after_filtering_reverse_dependencies_len
         );
 
-        trace!(
-            "{:?} remaining reverse dependencies.",
-            after_filtering_reverse_dependencies_len
-        );
+        trace!("{after_filtering_reverse_dependencies_len:?} remaining reverse dependencies.");
 
         Ok(reverse_dependencies)
     }
