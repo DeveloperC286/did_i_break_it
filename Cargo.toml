@@ -38,7 +38,7 @@ serde = "1.0.188"
 serde_json = "1.0.107"
 
 # For fancy console output.
-console = "0.15.7"
+console = "0.16.0"
 
 # For multiple threads.
 rayon = "1.8.0"
